@@ -1,0 +1,252 @@
+PROJECT 2 – BUSINESS ANALYSIS
+
+Mục tiêu:
+Xây dựng hệ thống phân tích dữ liệu bán hàng nhằm hỗ trợ theo dõi tình hình kinh doanh.
+
+Câu hỏi phân tích:
+1. Doanh thu theo tháng như thế nào?
+2. Sản phẩm nào bán chạy nhất?
+3. Khách hàng nào mang lại nhiều doanh thu nhất?
+4. Danh mục sản phẩm nào có doanh thu cao nhất?
+
+KPI:
+- Total Revenue
+- Total Orders
+- Top Products
+- Top Customers
+
+🔥 Nhóm 1: Doanh thu
+Tổng doanh thu là bao nhiêu?
+Doanh thu theo tháng?
+Xu hướng tăng/giảm?
+🔥 Nhóm 2: Sản phẩm
+Sản phẩm bán chạy nhất?
+Category nào mạnh nhất?
+🔥 Nhóm 3: Khu vực
+Khu vực nào bán tốt nhất?
+🔥 Nhóm 4: Hành vi
+Khách hàng loại nào mua nhiều?
+Kênh bán nào hiệu quả?
+
+
+
+
+1. 🎯 XÂY DỰNG BÀI TOÁN (Problem Definition)
+📌 Mục tiêu hệ thống
+
+Xây dựng một hệ thống giúp:
+
+Phân tích dữ liệu bán hàng
+Theo dõi hiệu suất kinh doanh
+Hỗ trợ ra quyết định (business decision support)
+📊 Các câu hỏi business cần trả lời
+👤 Khách hàng (Customer Analytics)
+Có bao nhiêu khách hàng?
+Khách hàng quay lại (repeat rate) là bao nhiêu?
+Phân bố khách hàng theo thành phố / bang
+CLV (Customer Lifetime Value)
+🛒 Đơn hàng (Order Analytics)
+Tổng số đơn theo thời gian (day / month / year)
+Tỷ lệ huỷ đơn (cancel rate)
+Thời gian giao hàng trung bình
+Delay: giao trễ so với dự kiến
+💰 Doanh thu (Revenue Analytics)
+Tổng doanh thu theo:
+thời gian
+danh mục sản phẩm
+seller
+AOV (Average Order Value)
+Top sản phẩm bán chạy
+⭐ Chất lượng (Review Analytics)
+Phân bố review_score (1–5)
+Sản phẩm/seller bị đánh giá thấp
+Mối quan hệ:
+→ giao hàng chậm ↔ review thấp
+🚚 Logistics
+Thời gian:
+order → approved
+approved → delivered
+Khu vực giao hàng chậm
+
+👉 Đây chính là phần “phát biểu bài toán” trong báo cáo:
+
+Xây dựng hệ thống phân tích dữ liệu bán hàng nhằm cung cấp insight về khách hàng, doanh thu, vận hành và chất lượng dịch vụ thông qua dashboard trực quan.
+
+
+Dataset: 
+***https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
+https://www.kaggle.com/datasets/census/e-commerce-retail-sales-series-data-collection
+https://www.kaggle.com/datasets/mohsinijaz1782005/e-commerce-customer-behavior-dashboard
+
+Phân tích dataset: 
+1. File olist_customers_dataset.csv 
+Cột	Ý nghĩa
+customer_id					ID của mỗi đơn hàng (1 khách có thể có nhiều ID)
+customer_unique_id			ID thật của khách hàng (1 người duy nhất)
+customer_zip_code_prefix
+customer_city				Thành phố
+customer_state				Bang / khu vực
+
+
+2. File olist_geolocation_dataset.csv
+geolocation_zip_code_prefix
+geolocation_lat
+geolocation_lng
+geolocation_city
+geolocation_state
+
+
+3. File olist_order_items_dataset.csv
+order_id
+order_item_id
+product_id
+seller_id
+shipping_limit_date
+price
+freight_value
+
+
+4. File olist_order_payments_dataset.csv
+order_id
+payment_sequential
+payment_type
+payment_installments
+payment_value
+
+
+5. olist_order_reviews_dataset.csv
+review_id
+order_id
+review_score
+review_comment_title
+review_comment_message
+review_creation_date
+review_answer_timestamp
+
+
+6. File olist_orders_dataset.csv
+order_id
+customer_id
+order_status
+order_purchase_timestamp
+order_approved_at
+order_delivered_carrier_date
+order_delivered_customer_date
+order_estimated_delivery_date
+
+
+7. File olist_products_dataset.csv
+product_id
+product_category_name
+product_name_lenghtlenght
+product_description_lenght
+product_photos_qty
+product_weight_g
+product_length_cm
+product_height_cm
+product_width_cm"
+
+
+8. File olist_sellers_dataset.csv
+seller_id
+seller_zip_code_prefix
+seller_city
+seller_state
+
+
+9. File product_category_name_translation.csv
+product_category_name
+product_category_name_english
+
+
+Pipeline:
+                (DATA SOURCE)
+                     │
+        ┌────────────┼────────────┐
+        │                         │
+  Batch Data                Streaming Data
+ (CSV Kaggle)            (Kafka / giả lập)
+        │                         │
+        ▼                         ▼
+   Data Cleaning           Spark Streaming
+   (Python)                (Real-time xử lý)
+        │                         │
+        └────────────┬────────────┘
+                     ▼
+               Data Storage
+          (PostgreSQL / Data Lake)
+                     │
+                     ▼
+             Data Warehouse
+         (Fact + Dimension tables)
+                     │
+                     ▼
+               Backend API
+            (FastAPI / Spring)
+                     │
+                     ▼
+              Frontend Web
+        (Dashboard + Charts)
+                     │
+                     ▼
+                Người dùng
+
+
+python: clean → join → master_data
+              ↓
+          build_features
+              ↓
+       features_order.csv  ← CÁI NÀY mới đầy đủ
+
+
+backend/
+│
+├── app/
+│   ├── main.py
+│   ├── database.py
+│   │
+│   ├── models/          # ORM
+│   │   ├── customer.py
+│   │   ├── product.py
+│   │   └── order.py
+│   │
+│   ├── schemas/         # response schema
+│   │
+│   ├── services/        # logic phân tích
+│   │   ├── revenue_service.py
+│   │   ├── product_service.py
+│   │   ├── customer_service.py
+│   │
+│   ├── routes/          # API endpoints
+│   │   ├── revenue.py
+│   │   ├── product.py
+│   │   ├── customer.py
+│   │
+│   └── utils/
+│
+└── requirements.txt
+
+
+
+frontend/
+│
+├── src/
+│   ├── components/
+│   │   ├── charts/
+│   │   ├── tables/
+│   │
+│   ├── pages/
+│   │   ├── Dashboard.jsx
+│   │   ├── Products.jsx
+│   │   ├── Customers.jsx
+│   │   ├── Revenue.jsx
+│   │   ├── Delivery.jsx
+│   │
+│   ├── services/
+│   │   └── api.js
+│   │
+│   └── App.jsx
+
+
+
+
