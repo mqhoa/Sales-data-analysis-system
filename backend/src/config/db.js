@@ -9,7 +9,6 @@ const pool = new Pool({
   port: process.env.DB_PORT || 5432,
 });
 
-// Test connection
 pool.connect((err, client, release) => {
   if (err) {
     console.error('❌ Database connection error:', err.stack);
