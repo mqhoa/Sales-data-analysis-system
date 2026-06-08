@@ -2,9 +2,7 @@
 const pool = require("../config/db");
 
 class InsightRepository {
-  /**
-   * ✅ Lấy insights cho Revenue
-   */
+  //  Lấy insights cho Revenue  
   static async getRevenueInsights() {
     try {
       const query = `
@@ -21,8 +19,10 @@ class InsightRepository {
           COALESCE(MIN(revenue), 0) AS lowest_month_revenue,
           COALESCE(AVG(revenue), 0) AS avg_month_revenue,
           COUNT(*) AS total_months,
+          -- CÔNG THỨC CHUẨN: Độ lệch chuẩn / Trung bình (Bọc NULLIF để chống chia cho số 0)
           CASE 
-            WHEN MIN(revenue) > 0 THEN ROUND(((MAX(revenue) - MIN(revenue)) / MIN(revenue) * 100)::numeric, 2)
+            WHEN AVG(revenue) > 0 THEN 
+              ROUND((STDDEV(revenue) / NULLIF(AVG(revenue), 0) * 100)::numeric, 2)
             ELSE 0
           END AS volatility_percent
         FROM monthly_data
@@ -35,9 +35,7 @@ class InsightRepository {
     }
   }
 
-  /**
-   * ✅ Lấy insights cho Products
-   */
+  //  Lấy insights cho Products 
   static async getProductInsights() {
     try {
       const query = `
@@ -68,9 +66,7 @@ class InsightRepository {
     }
   }
 
-  /**
-   * ✅ Lấy insights cho Customers
-   */
+  //  Lấy insights cho Customers  //
   static async getCustomerInsights() {
     try {
       const query = `
@@ -99,9 +95,7 @@ class InsightRepository {
     }
   }
 
-  /**
-   * ✅ Lấy insights cho Delivery/Quality
-   */
+  //  Lấy insights cho Delivery/Quality 
   static async getQualityInsights() {
   try {
     const query = `

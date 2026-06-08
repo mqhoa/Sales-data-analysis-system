@@ -1,11 +1,7 @@
-// backend/src/repositories/userRepository.js
 const pool = require("../config/db");
 const bcrypt = require("bcrypt");
 
 class UserRepository {
-  /**
-   * ✅ Tạo bảng users nếu chưa có
-   */
   static async createUsersTable() {
     try {
       const query = `
@@ -22,15 +18,11 @@ class UserRepository {
         )
       `;
       await pool.query(query);
-      console.log('✅ Users table ensured');
     } catch (error) {
-      console.error("❌ Error creating users table:", error);
+      throw error;
     }
   }
 
-  /**
-   * ✅ Đăng ký user mới
-   */
   static async register(username, email, password, fullName) {
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -44,16 +36,18 @@ class UserRepository {
       const result = await pool.query(query, [username, email, hashedPassword, fullName]);
       return result.rows[0];
     } catch (error) {
-      if (error.code === '23505') { // Unique violation
-        throw new Error('Username hoặc email đã tồn tại');
+      if (error.code === '23505') { 
+        if (error.detail.includes('username')) {
+          throw new Error('Username này đã được sử dụng');
+        }
+        if (error.detail.includes('email')) {
+          throw new Error('Email này đã được đăng ký');
+        }
       }
       throw error;
     }
   }
 
-  /**
-   * ✅ Lấy user theo username
-   */
   static async getUserByUsername(username) {
     try {
       const query = `
@@ -64,14 +58,10 @@ class UserRepository {
       const result = await pool.query(query, [username]);
       return result.rows[0] || null;
     } catch (error) {
-      console.error("❌ Error getting user by username:", error);
       throw error;
     }
   }
 
-  /**
-   * ✅ Lấy user theo ID
-   */
   static async getUserById(id) {
     try {
       const query = `
@@ -82,19 +72,14 @@ class UserRepository {
       const result = await pool.query(query, [id]);
       return result.rows[0] || null;
     } catch (error) {
-      console.error("❌ Error getting user by id:", error);
       throw error;
     }
   }
 
-  /**
-   * ✅ Verify password
-   */
   static async verifyPassword(plainPassword, hashedPassword) {
     try {
       return await bcrypt.compare(plainPassword, hashedPassword);
     } catch (error) {
-      console.error("❌ Error verifying password:", error);
       throw error;
     }
   }

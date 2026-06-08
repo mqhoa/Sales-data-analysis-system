@@ -1,9 +1,6 @@
 const pool = require("../config/db");
 
 class OrderRepository {
-  /**
-   * ✅ Lấy doanh thu theo tháng
-   */
   static async getMonthlyRevenue() {
     try {
       const query = `
@@ -22,14 +19,10 @@ class OrderRepository {
         revenue: parseFloat(row.revenue) || 0
       }));
     } catch (error) {
-      console.error("❌ Error in getMonthlyRevenue:", error);
-      throw new Error(`Database query failed: ${error.message}`);
+      throw error;
     }
   }
 
-  /**
-   * ✅ Lấy top 10 sản phẩm bán chạy
-   */
   static async getTopProducts() {
     try {
       const query = `
@@ -47,7 +40,7 @@ class OrderRepository {
       `;
       const result = await pool.query(query);
       
-      return result.rows.map((row, idx) => ({
+      return result.rows.map(row => ({
         product_id: row.product_id,
         name: `${row.product_id.substring(0, 8)}... - ${row.category}`,
         category: row.category || "Uncategorized",
@@ -55,14 +48,10 @@ class OrderRepository {
         revenue: parseFloat(row.revenue) || 0
       }));
     } catch (error) {
-      console.error("❌ Error in getTopProducts:", error);
-      throw new Error(`Database query failed: ${error.message}`);
+      throw error;
     }
   }
 
-  /**
-   * ✅ Lấy top 10 khách hàng chi tiêu nhiều nhất
-   */
   static async getTopCustomers() {
     try {
       const query = `
@@ -81,23 +70,19 @@ class OrderRepository {
       `;
       const result = await pool.query(query);
       
-      return result.rows.map((row, idx) => ({
+      return result.rows.map(row => ({
         customer_id: row.customer_id,
-        name: row.customer_id ? `${row.customer_id.substring(0, 8)}...` : `Customer ${idx + 1}`,
+        name: row.customer_id ? `${row.customer_id.substring(0, 8)}...` : "Unknown",
         order_count: parseInt(row.order_count) || 0,
         total_spent: parseFloat(row.total_spent) || 0,
         city: row.city || "Unknown",
         state: row.state || "Unknown"
       }));
     } catch (error) {
-      console.error("❌ Error in getTopCustomers:", error);
-      throw new Error(`Database query failed: ${error.message}`);
+      throw error;
     }
   }
 
-  /**
-   * ✅ Lấy thống kê giao hàng
-   */
   static async getDeliveryStats() {
     try {
       const query = `
@@ -119,8 +104,7 @@ class OrderRepository {
         avg_review_score: parseFloat(row.avg_review_score) || 0
       };
     } catch (error) {
-      console.error("❌ Error in getDeliveryStats:", error);
-      throw new Error(`Database query failed: ${error.message}`);
+      throw error;
     }
   }
 }
