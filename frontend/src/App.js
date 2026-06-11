@@ -1,4 +1,4 @@
-// frontend/src/App.jsx
+// frontend/src/App.js
 import { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
@@ -85,10 +85,19 @@ function App() {
       case 'products':
         return <Products />;
       case 'quality':
+        if (user?.role !== "admin") {
+          return <div>Access Denied</div>;
+        }
         return <Quality />;
       case 'geography':
+        if (user?.role !== "admin") {
+          return <div>Access Denied</div>;
+        }
         return <Geography />;
       case 'financials':
+        if (user?.role !== "admin") {
+          return <div>Access Denied</div>;
+        }
         return <Financials />;
       default:
         return <Dashboard />;
@@ -99,7 +108,7 @@ function App() {
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       <Navbar user={user} onLogout={handleLogout} />
       <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
-        <Sidebar activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
+        <Sidebar activeMenu={activeMenu} setActiveMenu={setActiveMenu} user={user}/>
         <div style={{ flex: 1, overflowY: 'auto' }}>
           {renderPage()}
         </div>

@@ -4,10 +4,7 @@ const UserRepository = require("../repositories/userRepository");
 const { JWT_SECRET, JWT_EXPIRE } = require("../config/constants");
 
 module.exports = {
-  /**
-   * ✅ POST /api/auth/register
-   * Đăng ký user mới
-   */
+  //  Đăng ký user mới  
   register: async (req, res) => {
     try {
       const { username, email, password, fullName } = req.body;
@@ -43,10 +40,7 @@ module.exports = {
     }
   },
 
-  /**
-   * ✅ POST /api/auth/login
-   * Đăng nhập user
-   */
+  //  Đăng nhập user  
   login: async (req, res) => {
     try {
       const { username, password } = req.body;
@@ -112,10 +106,7 @@ module.exports = {
     }
   },
 
-  /**
-   * ✅ GET /api/auth/me
-   * Lấy thông tin user hiện tại
-   */
+  //  Lấy thông tin user hiện tại  
   getMe: async (req, res) => {
     try {
       const user = await UserRepository.getUserById(req.user.id);
@@ -139,5 +130,13 @@ module.exports = {
         message: "Lỗi lấy thông tin user"
       });
     }
+  },
+
+  // Lấy role của user hiện tại
+  getRole: async (req, res) => {
+    res.json({
+      success: true,
+      role: req.user.role
+    });
   }
 };

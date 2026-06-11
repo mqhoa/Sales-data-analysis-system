@@ -2,9 +2,7 @@
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = require("../config/constants");
 
-/**
- * ✅ Middleware xác thực JWT token
- */
+//  Middleware xác thực JWT token   
 const authMiddleware = (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
@@ -16,7 +14,7 @@ const authMiddleware = (req, res, next) => {
       });
     }
 
-    const token = authHeader.substring(7); // Remove 'Bearer ' prefix
+    const token = authHeader.substring(7); 
     const decoded = jwt.verify(token, JWT_SECRET);
     
     req.user = decoded;
@@ -30,17 +28,5 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
-/**
- * ✅ Middleware kiểm tra role admin
- */
-const adminMiddleware = (req, res, next) => {
-  if (req.user.role !== 'admin') {
-    return res.status(403).json({
-      success: false,
-      message: "Chỉ admin mới có quyền truy cập"
-    });
-  }
-  next();
-};
 
-module.exports = { authMiddleware, adminMiddleware };
+module.exports = { authMiddleware };
