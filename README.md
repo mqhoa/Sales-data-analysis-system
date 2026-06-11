@@ -7,7 +7,7 @@ Website dashboard hỗ trợ trực quan hóa và phân tích dữ liệu bán h
 ## Công nghệ sử dụng
 
 * Frontend: React, Recharts, Chart.js
-* Backend: Node.js, Express.js
+* Backend: Node.js
 * Database: PostgreSQL
 
 ## Cài đặt
@@ -26,16 +26,24 @@ Thư mục gốc:
 npm install
 ```
 
-Thư mục backend:
+Thư mục backend, frontend:
 
 ```bash
-cd backend
 npm install
 ```
 
 ### Cấu hình môi trường
 
-Tạo file `.env` trong thư mục `backend` dựa trên file `.env.example`.
+Tạo file `.env` trong thư mục `backend`:
+PORT=8000
+
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=your_password
+DB_NAME=yourdatabase
+
+
 
 ### Cấu hình cơ sở dữ liệu
 
@@ -53,6 +61,7 @@ npm start
 Frontend:
 
 ```bash
+cd frontend
 npm start
 ```
 
