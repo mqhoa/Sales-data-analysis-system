@@ -1,7 +1,7 @@
 // Centralized configuration constants
 module.exports = {
   // JWT Configuration
-  JWT_SECRET: process.env.JWT_SECRET || 'your-secret-key-change-in-production',
+  JWT_SECRET: process.env.JWT_SECRET,
   JWT_EXPIRE: process.env.JWT_EXPIRE || '7d',
   
   // CORS Configuration
