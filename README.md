@@ -35,25 +35,6 @@ npm install
 ### Cấu hình môi trường
 
 Tạo file `.env` trong thư mục `backend`:
-PORT=8000
-
-DB_HOST=localhost
-
-DB_PORT=5432
-
-DB_USER=postgres
-
-DB_PASSWORD=your_password
-
-DB_NAME=your_database
-
-JWT_SECRET=your_secret_key
-
-JWT_EXPIRE=7d
-
-PORT=8000
-
-NODE_ENV=development
 
 
 ### Cấu hình cơ sở dữ liệu
