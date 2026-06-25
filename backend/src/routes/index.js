@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 
 // Middleware
-const { authMiddleware } = require("../middleware/auth");
+const {authMiddleware} = require("../middleware/auth");
 const authorize = require("../middleware/authorize");
 
 // Controllers
@@ -28,7 +28,7 @@ router.get("/revenue/monthly", authMiddleware, revenueController.getMonthlyReven
 router.get("/product/top", authMiddleware, productController.getTopProducts);
 router.get("/customer/top", authMiddleware, customerController.getTopCustomers);
 router.get("/delivery/stats", authMiddleware, deliveryController.getStats);
-
+router.get("/revenue/payment-stats", authMiddleware, revenueController.getPaymentStats);
 // ============ INSIGHTS ROUTES (NEW - Require JWT) ============
 router.get("/insights/revenue", authMiddleware, authorize("admin"), insightController.getRevenueInsights);
 router.get("/insights/products", authMiddleware, authorize("admin"), insightController.getProductInsights);

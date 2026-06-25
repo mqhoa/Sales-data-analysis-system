@@ -17,10 +17,10 @@ const corsOptions = {
   maxAge: 86400
 };
 
-// ✅ Apply CORS to all routes
+// Apply CORS to all routes
 app.use(cors(corsOptions));
 
-// ✅ Handle preflight requests explicitly
+// Handle preflight requests explicitly
 app.options('*', cors(corsOptions));
 
 // ============ MIDDLEWARE ============
@@ -39,7 +39,7 @@ app.use("/api", routes);
 // ============ HEALTH CHECK ============
 app.get("/", (req, res) => {
   res.json({ 
-    message: "🚀 Sales Analytics API running",
+    message: "Sales Analytics API running",
     version: "1.0.0",
     endpoints: {
       auth: "/api/auth",

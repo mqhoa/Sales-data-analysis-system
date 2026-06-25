@@ -249,4 +249,42 @@ frontend/
 
 
 
+Em chào anh chị. Em là Mai Quỳnh Hoa. sinh viên ngành KHMT tại đại học bách khkoa hà nội. Em ứng tuyển vị trí backend dev với mong muốn tìm hiểu sâu hơn về cách vận hành, kết nối dữ án giữa frontend và database. Em đã có kinh nghiệm trong việc tham gia xây dựng 2 dự án là hệ thống quản lí cư dân trong nhóm 4 người với vai trò fullstrack developer và xây dựng hệ thống phân tích giữu liệu bán hàng
+ĐƯợc biết FPT IS là cty con của FPT corditional hoạt động trong lĩnh vực công nghệ phần mềm. FPT là tập đoàn lớn và là mong ước bao người tron đó có em. vì vậy em mong đây sẽ là cơ hội để em ko chỉ trở thành thực tập sinh mà còn có cơ hội gắn bó với cty lâu dài
 
+Phần 2: Quản lí dân cư:
+Kiến trúc tổng thể: ko biết
+chọn spring boot vì nó mã nguồn mửo cấu hình sẵn 1 số chức năng phụ trợ cho việc code, có các annotation 
+frontend gọi API, các API được định tuyến và xử lí ở backend
+có 3 bảng trong database gồm user, feedbacks, feedback_report, user sẽ nộp form kiến nghị và cán bộ có quyền chấp nhận hoặc từ chối feedback, bbangreport để lưu những người báo cáo nhằm phát triển tính năng thông báo lại các vấn đề đã được giải quyết cho người dùng
+API gồm: api/get/feedbacks
+api/post/feedbacks
+api/put/feedback
+api/get/statFeedback
+Luồng đăng nhập: có 4 vai trò là admin, cán bộ hộ khẩu nhân khẩu, cán bộ phản ánh kiến nghị và dân cư. Khi tạo tài khkoanr sẽ được nhập vai trò, các vai trò ko phải dân cư thì sẽ phải đợi admin accept. mỗi vai trò sẽ dẫn đến trang trình bày riêng
+JWT là thẻ dùng để quản lý vai trò có 3 phần là header.payload.signature
+Access token được đính kèm ở đầu mỗi request api
+token hết hạn sẽ được tự động gọi mới thêm hạn
+
+Controller tiếp nhận các file đầu vào chuyển thành object, xác định dữ liệu cần trả về
+Service xử lí nghiệp vụ 
+Repository truy xuất database
+DI là kĩ thuật tránh sự ràng buộc giữa các lớp. cho phép sử dụng các lớp trừu tượng và sẽ gọi đến lớp cụ thể khi run
+spring bean ko bt
+@Autowired ko bt
+Xử lí Exception bằng cụm try catch và throw
+Try catch sẽ xử lý khi người dùng đăng kí thông tin ko đúng yêu cầu còn throw new trong:
+public Feedback updateStatus(Long id, FeedbackStatus newStatus) {
+        Optional<Feedback> feedbackOpt = repository.findById(id);
+        if (feedbackOpt.isPresent()) {
+            Feedback f = feedbackOpt.get();
+            f.setStatus(newStatus);
+            return repository.save(f);
+        } else {
+            throw new RuntimeException("Feedback not found with id: " + id);
+        }
+    } nhưng mà chưa biết để làm gì 
+các @ chưa vững
+
+PUT là cập nnhật bản ghi(ghi đè)
+PATCH ko bt

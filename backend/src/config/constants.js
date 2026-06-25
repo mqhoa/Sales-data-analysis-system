@@ -21,3 +21,4 @@ module.exports = {
   DEFAULT_LIMIT: 10,
   MAX_LIMIT: 100,
 };
+console.log("JWT_SECRET from env:", process.env.JWT_SECRET);

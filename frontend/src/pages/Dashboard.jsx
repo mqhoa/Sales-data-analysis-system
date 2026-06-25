@@ -21,7 +21,7 @@ export default function Dashboard() {
   const { data, loading, fetchAllData } = useDashboardStore();
 
   useEffect(() => {
-    console.log('📊 Dashboard mounted - Fetching data...');
+    console.log('Dashboard mounted - Fetching data...');
     fetchAllData();
   }, []);
 
@@ -50,7 +50,7 @@ export default function Dashboard() {
     shortenedName: p.category || p.name.split(' - ')[1] || 'Unknown'
   }));
 
-  console.log('📊 Dashboard Data:', {
+  console.log('Dashboard Data:', {
     monthlyRevenue: monthlyRevenue.length,
     totalRevenue: totalRevenue,
     peakMonthRevenue: peakMonthRevenue,

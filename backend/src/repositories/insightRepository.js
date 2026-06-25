@@ -39,15 +39,23 @@ class InsightRepository {
   static async getProductInsights() {
     try {
       const query = `
-        WITH product_data AS (
+        WITH payment_summary AS (
+          -- Gom nhóm payments trước để tránh làm nhân dòng (fan-out) hệ thống
+          SELECT order_id, SUM(payment_value) AS total_order_payment
+          FROM order_payments
+          WHERE payment_value IS NOT NULL AND payment_value > 0
+          GROUP BY order_id
+        ),
+        product_data AS (
           SELECT 
             fo.product_id,
             COALESCE(dp.product_category_name, 'Uncategorized') AS category,
-            COUNT(*) AS units_sold,
-            SUM(fo.total_amount) AS revenue
+            COUNT(DISTINCT fo.order_id) AS units_sold,
+            SUM(ps.total_order_payment) AS revenue
           FROM fact_orders fo
           LEFT JOIN dim_products dp ON fo.product_id = dp.product_id
-          WHERE fo.product_id IS NOT NULL AND fo.total_amount IS NOT NULL
+          INNER JOIN payment_summary ps ON fo.order_id = ps.order_id
+          WHERE fo.product_id IS NOT NULL 
           GROUP BY fo.product_id, dp.product_category_name
         )
         SELECT

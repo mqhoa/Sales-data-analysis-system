@@ -1,6 +1,30 @@
 const pool = require("../config/db");
 
 class OrderRepository {
+  static async getPaymentStats() {
+  try {
+    const query = `
+      SELECT
+        payment_type,
+        COUNT(*) AS count,
+        ROUND((COUNT(*)::float / NULLIF(SUM(COUNT(*)) OVER(), 0) * 100)::numeric, 1) AS percentage,
+        SUM(payment_value) AS total_value
+      FROM order_payments
+      WHERE payment_type IS NOT NULL
+      GROUP BY payment_type
+      ORDER BY count DESC
+    `;
+    const result = await pool.query(query);
+    return result.rows.map(row => ({
+      name: row.payment_type,
+      value: parseFloat(row.percentage) || 0,
+      total: parseFloat(row.total_value) || 0
+    }));
+  } catch (error) {
+    throw error;
+  }
+}
+
   static async getMonthlyRevenue() {
     try {
       const query = `
@@ -10,7 +34,7 @@ class OrderRepository {
         FROM fact_orders
         WHERE order_date IS NOT NULL AND total_amount > 0
         GROUP BY DATE_TRUNC('month', order_date::timestamp)
-        ORDER BY month DESC
+        ORDER BY month ASC 
       `;
       const result = await pool.query(query);
       

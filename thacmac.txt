@@ -1,2 +1,0 @@
-Học:
-1. dùng object và không dùng thì gọi API khác nhau như nào
